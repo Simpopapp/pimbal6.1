@@ -41,11 +41,7 @@ describe("Pinball physics (Fase 1)", () => {
         expect(b.y).toBeGreaterThanOrEqual(-20.6);
         expect(b.y).toBeLessThanOrEqual(20.6);
         // bola parada no fundo do canal de lançamento = voltou ao plunger
-        if (
-          b.x > TABLE_CONFIG.launchLane.innerX &&
-          b.y < -14 &&
-          Math.hypot(b.vx, b.vy) < 5
-        ) {
+        if (b.x > TABLE_CONFIG.launchLane.innerX && b.y < -14 && Math.hypot(b.vx, b.vy) < 5) {
           laneReturns++;
           pw.testLaunch(TUNING.physics.plunger.maxLaunch);
         }
