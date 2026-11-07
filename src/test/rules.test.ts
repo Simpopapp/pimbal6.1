@@ -28,11 +28,11 @@ describe("Regras de jogo (Fase 3)", () => {
     rules.rollover(lanes[0]!); // 100
     rules.rollover(lanes[1]!); // 200
     expect(rules.bonusValue).toBe(300);
-    rules.rollover(lanes[2]!); // +100 → 400, multiplicador sobe para 2
-    expect(rules.bonusValue).toBe(800); // 400 × 2
+    rules.rollover(lanes[2]!); // +100 → 300, multiplicador sobe para 2
+    expect(rules.bonusValue).toBe(600); // 300 × 2
     const result = rules.endOfBall();
-    expect(result.awarded).toBe(800);
-    expect(rules.score).toBe(1800);
+    expect(result.awarded).toBe(600);
+    expect(rules.score).toBe(1600);
     // bônus e multiplicador resetam para a próxima bola
     expect(rules.bonusValue).toBe(0);
     expect(rules.multiplier).toBe(1);
