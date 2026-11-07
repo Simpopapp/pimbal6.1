@@ -70,21 +70,23 @@ describe("Elementos de mesa (Fase 2)", () => {
   it("drop targets caem ao hit e o banco completo reseta", async () => {
     const pw = await PhysicsWorld.create(TABLE_CONFIG);
     const bank = TABLE_CONFIG.dropTargetBanks[0]!;
+    const collected: GameEvent[] = [];
     for (const target of bank.targets) {
       pw.placeBall({ x: target.pos.x + 1.5, y: target.pos.y });
       pw.testSetVelocity(-50, 0);
       let hit = false;
       for (let i = 0; i < Math.round(1.0 / DT) && !hit; i++) {
         pw.step(DT, NO_INPUT);
-        hit = eventsOf(pw).some(
+        const evs = eventsOf(pw);
+        collected.push(...evs);
+        hit = evs.some(
           (e) => e.type === "dropTargetHit" && e.targetId === target.id,
         );
       }
       expect(hit).toBe(true);
     }
     // o último hit deve ter completado o banco (evento bankCompleted)
-    const evs = eventsOf(pw);
-    expect(evs.some((e) => e.type === "bankCompleted")).toBe(true);
+    expect(collected.some((e) => e.type === "bankCompleted")).toBe(true);
     // banco reseta: nenhum alvo caído
     expect(pw.getDropTargetsDown()).toHaveLength(0);
   }, 30000);
