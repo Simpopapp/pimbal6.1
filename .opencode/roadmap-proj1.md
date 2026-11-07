@@ -17,15 +17,16 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 - Gates: build OK · tipos OK (oj typecheck limpo) · lint 0 erros · 6/6 testes · browser sem erro de console (screenshots em /tmp/browser/pinball)
 - Correções registradas: plunger em escala real (90–155 u/s); canal sai em y=8 (bolso na curva prendia a bola); guias ~15° até os flippers; pontas dos flippers para dentro.
 
-## Fase 2 — Elementos de mesa
+## Fase 2 — Elementos de mesa — CONCLUÍDA 2026-11-07
 
-- [ ] bumpers 3–4 (kick forte + pontos), slingshots 2 (kick angular)
-- [ ] rollovers + lanes superiores (sensores, pontos)
-- [ ] drop targets (banco 3–5, reset ao completar)
-- [ ] rampa(s) com túnel de waypoints (física 2D, render 3D)
-- [ ] outlanes/inlanes com guias
-- [ ] teste: cada elemento pontua e responde; partida usa todos sem travar
-- Gates: build OK · tipos OK · lint OK · testes verdes · browser
+- [x] bumpers 3–4 (kick forte + pontos), slingshots 2 (kick angular)
+- [x] rollovers + lanes superiores (sensores, pontos)
+- [x] drop targets (banco 3, reset ao completar)
+- [x] rampa com túnel de waypoints (órbita superior; física 2D, render 3D em tubo)
+- [x] outlanes/inlanes com guias + divisórias de outlane
+- [x] testes: cada elemento responde/pontua (bumper, sling, rollover, banco, rampa) — 11/11 no projeto
+- Gates: build OK · tipos OK · lint 0 erros · testes verdes · browser sem erro de console (screenshot da mesa populada)
+- Nota: bola que volta pelo topo cai no canal e espera novo plunger (comportamento válido; gate físico one-way fica para Fase 7).
 
 ## Fase 3 — Regras e pontuação
 
