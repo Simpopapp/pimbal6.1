@@ -5,6 +5,7 @@ import type { HudState } from "@/game/engine";
 type EngineHandle = {
   dispose: () => void;
   start: () => void;
+  init: () => Promise<void>;
   setTouch: (side: "left" | "right" | "plunger", down: boolean) => void;
 };
 
