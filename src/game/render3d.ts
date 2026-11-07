@@ -1,15 +1,15 @@
 import * as THREE from "three";
 
+import type { BallState } from "./physics";
 import { flipperOutline } from "./table.config";
 import { TUNING } from "./tuning";
 import type { TableConfig } from "./types";
-import type { BallState } from "./physics";
 
 const COLORS = TUNING.visual.colors;
 
 /** Render Three.js da mesa: constrói a cena a partir do TableConfig e sincroniza
- * com o estado da física a cada frame (bola interpolada). Fase 1 usa
- * placeholders simples; a Fase 5 troca materiais/geometrias por arte completa. */
+ * com o estado da física a cada frame (bola interpolada). Fase 1–2 usa
+ * geometria simples; a Fase 5 troca materiais por arte completa. */
 export class SceneRenderer {
   private renderer: THREE.WebGLRenderer;
   private scene = new THREE.Scene();
@@ -18,6 +18,7 @@ export class SceneRenderer {
   private ballMesh: THREE.Mesh;
   private flipperMeshes: THREE.Object3D[] = [];
   private plungerMesh: THREE.Object3D;
+  private dropTargetMeshes = new Map<string, THREE.Object3D>();
   private onResize = () => this.resize();
 
   constructor(
@@ -42,6 +43,11 @@ export class SceneRenderer {
     this.ballMesh = this.buildBall();
     this.flipperMeshes = this.buildFlippers();
     this.plungerMesh = this.buildPlunger();
+    this.buildBumpers();
+    this.buildSlingshots();
+    this.buildRollovers();
+    this.buildDropTargets();
+    this.buildRamps();
 
     this.resize();
     window.addEventListener("resize", this.onResize);
@@ -114,7 +120,9 @@ export class SceneRenderer {
   private buildFlippers(): THREE.Object3D[] {
     return this.config.flippers.map((spec) => {
       const outline = flipperOutline(spec);
-      const shape = new THREE.Shape(outline.map((p) => new THREE.Vector2(p.x, p.y)));
+      const shape = new THREE.Shape(
+        outline.map((p) => new THREE.Vector2(p.x, p.y)),
+      );
       const geo = new THREE.ExtrudeGeometry(shape, {
         depth: 0.7,
         bevelEnabled: false,
@@ -152,12 +160,116 @@ export class SceneRenderer {
     return rod;
   }
 
+  private buildBumpers(): void {
+    for (const bumper of this.config.bumpers) {
+      const group = new THREE.Group();
+      const body = new THREE.Mesh(
+        new THREE.CylinderGeometry(bumper.radius, bumper.radius * 0.92, 1.5, 24),
+        new THREE.MeshStandardMaterial({
+          color: 0x2a3350,
+          roughness: 0.5,
+          metalness: 0.4,
+        }),
+      );
+      body.position.y = 0.75;
+      const cap = new THREE.Mesh(
+        new THREE.CylinderGeometry(bumper.radius * 0.72, bumper.radius * 0.72, 0.5, 24),
+        new THREE.MeshStandardMaterial({
+          color: COLORS.plunger,
+          emissive: COLORS.plunger,
+          emissiveIntensity: 0.35,
+          roughness: 0.35,
+        }),
+      );
+      cap.position.y = 1.6;
+      group.add(body, cap);
+      group.position.set(bumper.pos.x, 0, -bumper.pos.y);
+      this.table.add(group);
+    }
+  }
+
+  private buildSlingshots(): void {
+    const mat = new THREE.MeshStandardMaterial({
+      color: COLORS.flipper,
+      roughness: 0.55,
+      metalness: 0.15,
+    });
+    for (const sling of this.config.slingshots) {
+      const shape = new THREE.Shape(
+        [sling.a, sling.c, sling.b].map((p) => new THREE.Vector2(p.x, p.y)),
+      );
+      const mesh = new THREE.Mesh(
+        new THREE.ExtrudeGeometry(shape, { depth: 0.9, bevelEnabled: false }),
+        mat,
+      );
+      mesh.rotation.x = -Math.PI / 2;
+      this.table.add(mesh);
+    }
+  }
+
+  private buildRollovers(): void {
+    const mat = new THREE.MeshStandardMaterial({
+      color: COLORS.plunger,
+      emissive: COLORS.plunger,
+      emissiveIntensity: 0.5,
+      roughness: 0.4,
+    });
+    for (const roll of this.config.rollovers) {
+      const mesh = new THREE.Mesh(
+        new THREE.CylinderGeometry(roll.radius, roll.radius, 0.08, 20),
+        mat,
+      );
+      mesh.position.set(roll.pos.x, 0.06, -roll.pos.y);
+      this.table.add(mesh);
+    }
+  }
+
+  private buildDropTargets(): void {
+    const mat = new THREE.MeshStandardMaterial({
+      color: 0xf0b429,
+      roughness: 0.4,
+      metalness: 0.3,
+    });
+    for (const bank of this.config.dropTargetBanks) {
+      for (const target of bank.targets) {
+        const mesh = new THREE.Mesh(
+          new THREE.BoxGeometry(target.halfW * 2, 1.6, 0.3),
+          mat,
+        );
+        mesh.position.set(target.pos.x, 0.8, -target.pos.y);
+        this.table.add(mesh);
+        this.dropTargetMeshes.set(target.id, mesh);
+      }
+    }
+  }
+
+  private buildRamps(): void {
+    const mat = new THREE.MeshStandardMaterial({
+      color: 0x1c2c52,
+      roughness: 0.35,
+      metalness: 0.55,
+      transparent: true,
+      opacity: 0.85,
+    });
+    for (const ramp of this.config.ramps) {
+      const pts = ramp.waypoints.map(
+        (p) => new THREE.Vector3(p.x, ramp.height, -p.y),
+      );
+      const curve = new THREE.CatmullRomCurve3(pts);
+      const mesh = new THREE.Mesh(
+        new THREE.TubeGeometry(curve, 64, 0.7, 10, false),
+        mat,
+      );
+      this.table.add(mesh);
+    }
+  }
+
   syncBall(ball: BallState, alpha: number): void {
     const r = TUNING.physics.ball.radius;
     const ix = ball.px + (ball.x - ball.px) * alpha;
     const iy = ball.py + (ball.y - ball.py) * alpha;
     this.ballMesh.visible = true;
-    this.ballMesh.position.set(ix, r, -iy);
+    this.ballMesh.position.set(ix, r + ball.h, -iy);
   }
 
   hideBall(): void {
@@ -175,6 +287,12 @@ export class SceneRenderer {
     const lane = this.config.launchLane;
     const x = (lane.innerX + lane.outerX) / 2;
     this.plungerMesh.position.z = -lane.bottomY + 0.9 + charge * 1.4;
+  }
+
+  syncDropTargets(downIds: string[]): void {
+    for (const [id, mesh] of this.dropTargetMeshes) {
+      mesh.visible = !downIds.includes(id);
+    }
   }
 
   render(): void {

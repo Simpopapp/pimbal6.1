@@ -2,6 +2,7 @@ import { PhysicsWorld, type StepInput } from "./physics";
 import { SceneRenderer } from "./render3d";
 import { TABLE_CONFIG } from "./table.config";
 import { TUNING } from "./tuning";
+import type { GameEvent } from "./types";
 
 export interface HudState {
   score: number;
@@ -11,6 +12,22 @@ export interface HudState {
   plunger: number;
   message: string | null;
 }
+
+/** Pontos temporários por evento; a Fase 3 centraliza em rules.ts. */
+const EVENT_POINTS: Partial<Record<GameEvent["type"], number>> = {
+  bumperHit: 100,
+  slingshotHit: 50,
+  rolloverHit: 25,
+  dropTargetHit: 50,
+  bankCompleted: 500,
+  rampCompleted: 1000,
+};
+
+const EVENT_MESSAGES: Partial<Record<GameEvent["type"], string>> = {
+  rampCompleted: "RAMP COMPLETE",
+  bankCompleted: "BANK DOWN",
+  ballLost: "BALL LOST",
+};
 
 /** Dono exclusivo do requestAnimationFrame: acumulador com passo fixo de
  * 240 Hz e render interpolado. O React apenas recebe estados para o HUD. */
@@ -24,6 +41,7 @@ export class GameEngine {
   private simTime = 0;
   private respawnAt: number | null = null;
   private ballsLost = 0;
+  private score = 0;
   private message: string | null = null;
   private input: StepInput = { left: false, right: false, plunger: false };
   private lastHud: HudState | null = null;
@@ -126,6 +144,7 @@ export class GameEngine {
     else r.hideBall();
     r.syncFlippers(p.getFlipperAngles());
     r.syncPlunger(p.getPlungerCharge());
+    r.syncDropTargets(p.getDropTargetsDown());
     r.render();
   };
 
@@ -133,15 +152,21 @@ export class GameEngine {
     const p = this.physics;
     if (!p) return;
     for (const ev of p.takeEvents()) {
+      this.score += EVENT_POINTS[ev.type] ?? 0;
+      const msg = EVENT_MESSAGES[ev.type];
+      if (msg) this.message = msg;
       if (ev.type === "ballLost") {
         this.ballsLost++;
         this.respawnAt = this.simTime + TUNING.physics.drain.respawnDelayS;
-        this.message = "BALL LOST";
       } else if (ev.type === "ballSpawned") {
         this.message = null;
       }
     }
-    if (this.respawnAt !== null && !p.isBallInPlay() && this.simTime >= this.respawnAt) {
+    if (
+      this.respawnAt !== null &&
+      !p.isBallInPlay() &&
+      this.simTime >= this.respawnAt
+    ) {
       p.respawnBall();
       this.respawnAt = null;
     }
@@ -152,7 +177,7 @@ export class GameEngine {
     const p = this.physics;
     if (!p) return;
     const hud: HudState = {
-      score: 0,
+      score: this.score,
       balls: Math.max(1, 3 - this.ballsLost),
       ballInPlay: p.isBallInPlay(),
       plunger: Math.round(p.getPlungerCharge() * 100) / 100,
