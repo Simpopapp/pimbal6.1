@@ -208,14 +208,17 @@ Contratos principais:
 
 ## 7. Estratégia de enxame (subagentes)
 
-- Ondas: **Onda 0 (fundação, agente principal)** — deps + tipos + tuning +
-  table.config + esqueleto de física/render/engine; contratos fixados antes de
-  qualquer paralelo.
-- Ondas seguintes (spawn_agent, nunca `oc`): pacotes verticais independentes
-  com dono exclusivo de arquivos — ex.: elementos de mesa (Fase 2), regras
-  (Fase 3), missões (Fase 4), visual (Fase 5), juice (Fase 6), profundidade
-  (Fase 7). Cada subagente recebe os 3 pilares centrais + os 3 pilares próprios
-  em `.opencode/work/sub/{K}/` e não toca arquivos de outro.
+- Decisão de ambiente (registrada): nesta sandbox, `spawn_agent` é **somente
+  leitura** (pesquisa/verificação, sem edição de arquivos). A produção de código
+  fica, portanto, com o agente principal; subagentes são usados para
+  investigação/verificação independente quando útil. Continua proibido usar
+  `oc` para tarefas do remix.
+- Ondas de trabalho: **Onda 0 (fundação, agente principal)** — deps + tipos +
+  tuning + table.config + esqueleto de física/render/engine; contratos fixados
+  antes de qualquer paralelo.
+- Pacotes seguintes (fases 2–7) seguem o recorte de arquivos e gates descrito
+  abaixo; como o `spawn_agent` disponível não escreve arquivos, o agente
+  principal produz o código e valida cada pacote contra os critérios de aceite.
 - Todo relato de subagente é verificado no disco + gates antes de marcar `[x]`.
 - Se o remix terminar antes do roadmap completo, deixar o roadmap com o estado
   exato e a linha "Próximo remix: …".
