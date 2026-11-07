@@ -52,7 +52,7 @@ export const TABLE_CONFIG: TableConfig = {
   walls: [
     // curva superior externa: (-10,10) → ápice (0,20) → (10,10)
     ...arc(0, 10, 10, 180, 0, 16),
-    seg({ x: -10, y: 10 }, { x: -10, y: -14.6 }, "outer"), // parede esquerda
+    seg({ x: -10, y: 10 }, { x: -10, y: -13.5 }, "outer"), // parede esquerda
     seg({ x: 10, y: 10 }, { x: 10, y: -20 }, "outer"), // parede direita (canal)
     seg({ x: 10, y: -20 }, { x: LANE_INNER_X, y: -20 }, "outer"), // piso do canal
     seg({ x: LANE_INNER_X, y: -20 }, { x: LANE_INNER_X, y: 8 }, "inner"), // parede interna do canal

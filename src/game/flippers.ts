@@ -29,7 +29,7 @@ export class FlipperController {
     const hull = RAPIER.ColliderDesc.convexHull(flat);
     if (!hull) throw new Error("flipper convex hull inválido");
     world.createCollider(
-      hull.setRestitution(0.2).setFriction(0.6),
+      hull.setRestitution(0.2).setFriction(0.25),
       this.body,
     );
   }
