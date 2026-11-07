@@ -107,8 +107,10 @@ export function PinballGame() {
 
       <footer className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center pb-3">
         <p className="rounded-full bg-background/60 px-4 py-1 text-[11px] text-muted-foreground backdrop-blur-sm">
-          <span className="font-semibold text-foreground">Z</span>/<span className="font-semibold text-foreground">←</span> left flipper ·{" "}
-          <span className="font-semibold text-foreground">/</span>/<span className="font-semibold text-foreground">→</span> right flipper ·{" "}
+          <span className="font-semibold text-foreground">Z</span>/
+          <span className="font-semibold text-foreground">←</span> left flipper ·{" "}
+          <span className="font-semibold text-foreground">/</span>/
+          <span className="font-semibold text-foreground">→</span> right flipper ·{" "}
           <span className="font-semibold text-foreground">Space</span> hold & release to launch
         </p>
       </footer>

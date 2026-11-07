@@ -135,16 +135,16 @@ Stage só com paths intencionais. Nunca `add .` / `add -A` sem ordem explícita.
 
 ## 5. Referência rápida
 
-| Preciso | Comando |
-|---------|---------|
-| Ver mudanças | `"$__LOVABLE_REAL_GIT" status --short` |
-| Ver diff | `"$__LOVABLE_REAL_GIT" diff -- <paths>` |
-| Ver histórico | `"$__LOVABLE_REAL_GIT" log --oneline -10` |
-| Adicionar | `"$__LOVABLE_REAL_GIT" add <paths>` |
-| Comitar | `"$__LOVABLE_REAL_GIT" -c user.name="<nome>" -c user.email="<email>" commit -m "<msg>"` |
-| Levar à main | `checkout main` + `merge --ff-only <branch>` + `push origin main` |
-| Enviar | `"$__LOVABLE_REAL_GIT" push origin <branch>` |
-| Local vs remoto | `status -sb` + `rev-list --left-right --count origin/<branch>...HEAD` |
+| Preciso         | Comando                                                                                 |
+| --------------- | --------------------------------------------------------------------------------------- |
+| Ver mudanças    | `"$__LOVABLE_REAL_GIT" status --short`                                                  |
+| Ver diff        | `"$__LOVABLE_REAL_GIT" diff -- <paths>`                                                 |
+| Ver histórico   | `"$__LOVABLE_REAL_GIT" log --oneline -10`                                               |
+| Adicionar       | `"$__LOVABLE_REAL_GIT" add <paths>`                                                     |
+| Comitar         | `"$__LOVABLE_REAL_GIT" -c user.name="<nome>" -c user.email="<email>" commit -m "<msg>"` |
+| Levar à main    | `checkout main` + `merge --ff-only <branch>` + `push origin main`                       |
+| Enviar          | `"$__LOVABLE_REAL_GIT" push origin <branch>`                                            |
+| Local vs remoto | `status -sb` + `rev-list --left-right --count origin/<branch>...HEAD`                   |
 
 ---
 

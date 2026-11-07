@@ -48,26 +48,33 @@ Ao receber "Stage NN completed...":
 **Confiança da avaliação:** alta | média | baixa
 
 ## Resumo executivo
+
 2–4 frases sobre o estado real da etapa.
 
 ## Cobertura de requisitos
+
 - Atendido: …
 - Parcial: …
 - Ausente / não evidenciado: …
 
 ## Qualidade do código
+
 Pontos fortes e pontos de atenção objetivos.
 
 ## Discrepâncias
+
 Diferenças entre o status da etapa e o que o código mostra.
 
 ## Riscos para as próximas etapas
+
 Lista curta e acionável.
 
 ## Recomendações
+
 O que convém corrigir antes de avançar.
 
 ## Evidências consultadas
+
 - docs/planning/…
 - arquivos/áreas de código inspecionados
 ```

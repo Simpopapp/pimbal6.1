@@ -113,9 +113,7 @@ export class SceneRenderer {
   private buildFlippers(): THREE.Object3D[] {
     return this.config.flippers.map((spec) => {
       const outline = flipperOutline(spec);
-      const shape = new THREE.Shape(
-        outline.map((p) => new THREE.Vector2(p.x, p.y)),
-      );
+      const shape = new THREE.Shape(outline.map((p) => new THREE.Vector2(p.x, p.y)));
       const geo = new THREE.ExtrudeGeometry(shape, {
         depth: 0.7,
         bevelEnabled: false,

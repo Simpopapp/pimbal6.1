@@ -58,10 +58,28 @@ export const TABLE_CONFIG: TableConfig = {
     seg({ x: LANE_INNER_X, y: -20 }, { x: LANE_INNER_X, y: 8 }, "inner"), // parede interna do canal
     // curva do canal: (8.5,8) → (4.5,12), tangente horizontal no fim
     ...arc(4.5, 8, 4, 0, 90, 10),
-    ...polyline([{ x: 4.5, y: 12 }, { x: 0.5, y: 12 }], "inner"), // guia de saída do canal
+    ...polyline(
+      [
+        { x: 4.5, y: 12 },
+        { x: 0.5, y: 12 },
+      ],
+      "inner",
+    ), // guia de saída do canal
     // guias inferiores até os flippers (inclinação ~15° para a bola rolar)
-    ...polyline([{ x: -10, y: -13.5 }, { x: -4.45, y: -15.0 }], "guide"),
-    ...polyline([{ x: LANE_INNER_X, y: -13.5 }, { x: 4.45, y: -15.0 }], "guide"),
+    ...polyline(
+      [
+        { x: -10, y: -13.5 },
+        { x: -4.45, y: -15.0 },
+      ],
+      "guide",
+    ),
+    ...polyline(
+      [
+        { x: LANE_INNER_X, y: -13.5 },
+        { x: 4.45, y: -15.0 },
+      ],
+      "guide",
+    ),
   ],
   launchLane: { innerX: LANE_INNER_X, outerX: LANE_OUTER_X, bottomY: LANE_BOTTOM_Y },
   flippers: [

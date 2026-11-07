@@ -34,13 +34,13 @@ reinício, com missões, combos, multibola e ranking local.
 
 ### 3.1 Stack
 
-| Papel | Escolha | Por quê |
-|---|---|---|
-| Render 3D | Three.js (+ `EffectComposer`/`UnrealBloomPass` na Fase 5) | padrão de mercado, maduro em Vite |
-| Física | `@dimforge/rapier2d-compat` | pinball é física em plano inclinado: simular 2D e renderizar 3D; `compat` embute o WASM em base64, funciona no bundle Vite sem fetch externo |
-| Áudio | Web Audio API (síntese) | zero assets externos, latência baixa |
-| HUD | HTML/CSS sobre o canvas (sem framework de UI do jogo) | conforme planejamento; usa tokens do design system |
-| Estado | módulo de estado próprio (máquina de estados) | sem React re-renderizando o loop de física |
+| Papel     | Escolha                                                   | Por quê                                                                                                                                      |
+| --------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Render 3D | Three.js (+ `EffectComposer`/`UnrealBloomPass` na Fase 5) | padrão de mercado, maduro em Vite                                                                                                            |
+| Física    | `@dimforge/rapier2d-compat`                               | pinball é física em plano inclinado: simular 2D e renderizar 3D; `compat` embute o WASM em base64, funciona no bundle Vite sem fetch externo |
+| Áudio     | Web Audio API (síntese)                                   | zero assets externos, latência baixa                                                                                                         |
+| HUD       | HTML/CSS sobre o canvas (sem framework de UI do jogo)     | conforme planejamento; usa tokens do design system                                                                                           |
+| Estado    | módulo de estado próprio (máquina de estados)             | sem React re-renderizando o loop de física                                                                                                   |
 
 Nunca trocar Three.js/Rapier por alternativas; nunca usar física 3D.
 
@@ -198,13 +198,13 @@ Contratos principais:
 
 ## 6. Riscos e mitigação
 
-| Risco | Mitigação |
-|---|---|
-| Bola atravessa flipper em alta velocidade | CCD + substepping + clamp de velocidade; teste de regressão dedicado |
-| Física "de brinquedo" (flutuante) | g_eff em polegadas (43,7 u/s²), tuning centralizado; ajuste antes da Fase 2 |
-| WASM do Rapier no SSR | import do jogo atrás de `<ClientOnly>` + `React.lazy`; nada de Rapier no grafo SSR |
-| Interpolação com artefatos | guardar posição anterior/atual da bola por passo; render lerp |
-| Performance em notebook mediano | bloom só na Fase 5 com opção de qualidade; geometria low-poly; draw calls agrupados |
+| Risco                                     | Mitigação                                                                           |
+| ----------------------------------------- | ----------------------------------------------------------------------------------- |
+| Bola atravessa flipper em alta velocidade | CCD + substepping + clamp de velocidade; teste de regressão dedicado                |
+| Física "de brinquedo" (flutuante)         | g_eff em polegadas (43,7 u/s²), tuning centralizado; ajuste antes da Fase 2         |
+| WASM do Rapier no SSR                     | import do jogo atrás de `<ClientOnly>` + `React.lazy`; nada de Rapier no grafo SSR  |
+| Interpolação com artefatos                | guardar posição anterior/atual da bola por passo; render lerp                       |
+| Performance em notebook mediano           | bloom só na Fase 5 com opção de qualidade; geometria low-poly; draw calls agrupados |
 
 ## 7. Estratégia de enxame (subagentes)
 

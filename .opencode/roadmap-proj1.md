@@ -3,6 +3,7 @@
 Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de física + browser. Marcar `[x]` só com gates verdes.
 
 ## Fase 1 — Núcleo de física (sem arte)
+
 - [ ] deps: three, @dimforge/rapier2d-compat, @types/three
 - [ ] src/game/{types,tuning,table.config}.ts (contratos fundação)
 - [ ] física: mundo Rapier, gravidade inclinada 43,7 u/s², bola c/ CCD, paredes restituição 0,4
@@ -16,6 +17,7 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 - Gates: build OK · tipos OK · lint OK · testes de física verdes · browser sem erro de console
 
 ## Fase 2 — Elementos de mesa
+
 - [ ] bumpers 3–4 (kick forte + pontos), slingshots 2 (kick angular)
 - [ ] rollovers + lanes superiores (sensores, pontos)
 - [ ] drop targets (banco 3–5, reset ao completar)
@@ -25,6 +27,7 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 - Gates: build OK · tipos OK · lint OK · testes verdes · browser
 
 ## Fase 3 — Regras e pontuação
+
 - [ ] state.ts: máquina title→playing→ball_lost→game_over (+paused)
 - [ ] pontos + multiplicador de bônus (rollovers/lanes), aplica no fim da bola
 - [ ] 3 bolas, contagem, game over, reinício sem reload
@@ -33,6 +36,7 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 - Gates: build OK · tipos OK · lint OK · testes verdes · browser
 
 ## Fase 4 — Missões e combos
+
 - [ ] missions.ts: ≥2 missões com progresso visível e recompensa
 - [ ] combos com janela de tempo e multiplicador temporário
 - [ ] luzes de progresso na mesa
@@ -41,6 +45,7 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 - Gates: build OK · tipos OK · lint OK · testes verdes · browser
 
 ## Fase 5 — Visual 3D completo
+
 - [ ] geometria própria (bumpers capa, flippers cônicos, rampas tubo/trilho)
 - [ ] materiais: playfield textura procedural, metal env map, translúcidos, borracha
 - [ ] luz ambiente + spots + emissivos; bloom, vinheta, ACES
@@ -49,6 +54,7 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 - Gates: build OK · tipos OK · lint OK · browser (screenshot verificado)
 
 ## Fase 6 — Game feel (juice)
+
 - [ ] partículas por evento; screen shake amortizado; hit-stop 1–2 frames
 - [ ] flash de luz com decaimento; texto flutuante de pontos
 - [ ] áudio sintetizado por evento (flipper, bumper, slingshot, rampa, drop, drain, extra, ambiente)
@@ -58,6 +64,7 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 - Gates: build OK · tipos OK · lint OK · testes verdes · browser
 
 ## Fase 7 — Profundidade de jogo
+
 - [ ] multibola 2–3 bolas (física N bolas) via recompensa de missão
 - [ ] ball saver pós-lançamento; kickback/save lane nos outlanes
 - [ ] 3–4 modos de missão encadeados (objetivo, tempo, recompensa)
@@ -68,5 +75,6 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 - Gates: build OK · tipos OK · lint OK · testes verdes · browser
 
 ## Encerramento
+
 - [ ] aceite global: partida 5+ min, screenshot vitrine, 60 fps, juice audível, zero atravessamento
 - Próximo remix: primeira fase não concluída acima.

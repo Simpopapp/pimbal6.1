@@ -32,10 +32,7 @@ export class FlipperController {
     });
     const hull = RAPIER.ColliderDesc.convexHull(flat);
     if (!hull) throw new Error("flipper convex hull inválido");
-    world.createCollider(
-      hull.setRestitution(0.2).setFriction(0.25),
-      this.body,
-    );
+    world.createCollider(hull.setRestitution(0.2).setFriction(0.25), this.body);
   }
 
   setInput(down: boolean): void {
@@ -46,9 +43,7 @@ export class FlipperController {
     const target = this.pressed ? this.spec.upAngle : this.spec.restAngle;
     const delta = target - this.angle;
     const towardUp = delta * this.raiseSign > 0;
-    const maxV = towardUp
-      ? TUNING.physics.flipper.raiseSpeed
-      : TUNING.physics.flipper.fallSpeed;
+    const maxV = towardUp ? TUNING.physics.flipper.raiseSpeed : TUNING.physics.flipper.fallSpeed;
     const w = Math.max(-maxV, Math.min(maxV, delta / dt));
     // rapier2d: angvel é escalar
     this.body.setAngvel(w, true);

@@ -70,9 +70,7 @@ export class PhysicsWorld {
       const len = Math.hypot(dx, dy);
       const mid = { x: (w.from.x + w.to.x) / 2, y: (w.from.y + w.to.y) / 2 };
       const body = this.world.createRigidBody(
-        RAPIER.RigidBodyDesc.fixed()
-          .setTranslation(mid.x, mid.y)
-          .setRotation(Math.atan2(dy, dx)),
+        RAPIER.RigidBodyDesc.fixed().setTranslation(mid.x, mid.y).setRotation(Math.atan2(dy, dx)),
       );
       this.world.createCollider(
         RAPIER.ColliderDesc.cuboid(len / 2 + t / 2, t / 2)
@@ -182,10 +180,7 @@ export class PhysicsWorld {
         1,
         this.plungerCharge + dt / TUNING.physics.plunger.chargeTimeS,
       );
-      b.setTranslation(
-        { x: this.config.plunger.spawn.x, y: this.config.plunger.spawn.y },
-        true,
-      );
+      b.setTranslation({ x: this.config.plunger.spawn.x, y: this.config.plunger.spawn.y }, true);
       b.setLinvel({ x: 0, y: 0 }, true);
     } else if (this.plungerCharging && !held) {
       this.plungerCharging = false;
