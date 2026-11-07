@@ -22,7 +22,7 @@ export const TUNING = {
       friction: 0.05,
       linearDamping: 0.08,
       density: 1.2,
-      maxSpeed: 420,
+      maxSpeed: 260,
     },
     walls: { restitution: 0.4, friction: 0.05 },
     flipper: {
@@ -33,8 +33,9 @@ export const TUNING = {
     },
     plunger: {
       chargeTimeS: 1.15,
-      minLaunch: 210,
-      maxLaunch: 370,
+      // bola real deixa o plunger a ~2-4 m/s ≈ 90-160 in/s
+      minLaunch: 90,
+      maxLaunch: 155,
     },
     drain: { respawnDelayS: 1.0 },
   },
