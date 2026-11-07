@@ -72,7 +72,8 @@ describe("Pinball physics (Fase 1)", () => {
 
   it("flipper transfer energia à bola (chuta para cima)", async () => {
     const pw = await PhysicsWorld.create(TABLE_CONFIG);
-    pw.placeBall({ x: -6.2, y: -13.0 });
+    // bola caindo sobre o meio do flipper esquerdo, acionado no mesmo instante
+    pw.placeBall({ x: -6.0, y: -15.4 });
     const startY = pw.getBall().y;
     let maxY = startY;
     const input: StepInput = { ...NO_INPUT, left: true };
