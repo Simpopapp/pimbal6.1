@@ -132,6 +132,63 @@ export const TABLE_CONFIG: TableConfig = {
       upAngle: -FLIPPER_SWEEP,
     },
   ],
+  bumpers: [
+    { id: "bumper-a", pos: { x: -3.5, y: 6.5 }, radius: 1.15, kickSpeed: 95 },
+    { id: "bumper-b", pos: { x: 0, y: 9.5 }, radius: 1.15, kickSpeed: 95 },
+    { id: "bumper-c", pos: { x: 3.5, y: 5.5 }, radius: 1.15, kickSpeed: 95 },
+  ] satisfies BumperSpec[],
+  slingshots: [
+    {
+      id: "sling-left",
+      a: { x: -6.6, y: -12.6 },
+      b: { x: -4.3, y: -13.4 },
+      c: { x: -5.2, y: -11.5 },
+      kickNormal: { x: 0.33, y: 0.94 },
+      kickSpeed: 85,
+    },
+    {
+      id: "sling-right",
+      a: { x: 6.6, y: -12.6 },
+      b: { x: 4.3, y: -13.4 },
+      c: { x: 5.2, y: -11.5 },
+      kickNormal: { x: -0.33, y: 0.94 },
+      kickSpeed: 85,
+    },
+  ] satisfies SlingshotSpec[],
+  rollovers: [
+    { id: "lane-l", pos: { x: -4, y: 15.8 }, radius: 0.55 },
+    { id: "lane-c", pos: { x: 0, y: 16.6 }, radius: 0.55 },
+    { id: "lane-r", pos: { x: 4, y: 15.8 }, radius: 0.55 },
+  ] satisfies RolloverSpec[],
+  dropTargetBanks: [
+    {
+      id: "bank-left",
+      targets: [
+        { id: "dt-1", pos: { x: -6.5, y: 3.5 }, halfW: 0.25, halfH: 0.9 },
+        { id: "dt-2", pos: { x: -6.5, y: 1.5 }, halfW: 0.25, halfH: 0.9 },
+        { id: "dt-3", pos: { x: -6.5, y: -0.5 }, halfW: 0.25, halfH: 0.9 },
+      ],
+    },
+  ] satisfies DropTargetBankSpec[],
+  ramps: [
+    {
+      id: "ramp-orbit",
+      entry: { pos: { x: -8.2, y: 6 }, radius: 1.1, minSpeed: 45 },
+      waypoints: [
+        { x: -8.2, y: 6 },
+        { x: -9.1, y: 9.5 },
+        { x: -8.6, y: 13.5 },
+        { x: -5.5, y: 16.8 },
+        { x: -0.5, y: 18.0 },
+        { x: 4.5, y: 17.2 },
+        { x: 7.2, y: 14.8 },
+        { x: 7.9, y: 12.2 },
+      ],
+      height: 2.6,
+      exitSpeedFactor: 0.85,
+      minExitSpeed: 55,
+    },
+  ] satisfies RampSpec[],
   drain: { y: -18, maxX: LANE_INNER_X - 0.15 },
   plunger: { spawn: { x: 9.25, y: -19.3 } },
 };
