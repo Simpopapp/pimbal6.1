@@ -2,7 +2,8 @@ import * as THREE from "three";
 
 import { flipperOutline } from "./table.config";
 import { TUNING } from "./tuning";
-import type { BallState, TableConfig } from "./types";
+import type { TableConfig } from "./types";
+import type { BallState } from "./physics";
 
 const COLORS = TUNING.visual.colors;
 
@@ -165,7 +166,8 @@ export class SceneRenderer {
 
   syncFlippers(angles: number[]): void {
     for (let i = 0; i < this.flipperMeshes.length; i++) {
-      this.flipperMeshes[i].rotation.y = angles[i] ?? 0;
+      const mesh = this.flipperMeshes[i];
+      if (mesh) mesh.rotation.y = angles[i] ?? 0;
     }
   }
 

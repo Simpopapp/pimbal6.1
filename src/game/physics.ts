@@ -235,6 +235,8 @@ export class PhysicsWorld {
 
   /** contorno do flipper i, para o render usar a mesma geometria da física */
   flipperOutlineAt(i: number): Vec2[] {
-    return flipperOutline(this.config.flippers[i]);
+    const spec = this.config.flippers[i];
+    if (!spec) return [];
+    return flipperOutline(spec);
   }
 }
