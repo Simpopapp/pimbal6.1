@@ -66,13 +66,14 @@ export const TABLE_CONFIG: TableConfig = {
   launchLane: { innerX: LANE_INNER_X, outerX: LANE_OUTER_X, bottomY: LANE_BOTTOM_Y },
   flippers: [
     {
+      // pivô junto à parede esquerda; a ponta varre para dentro (direita-baixo)
       side: "left",
       pivot: { x: -FLIPPER_PIVOT_X, y: FLIPPER_PIVOT_Y },
       length: FLIPPER_LEN,
       baseHalfWidth: 0.55,
       tipHalfWidth: 0.28,
-      restAngle: FLIPPER_SWEEP,
-      upAngle: -FLIPPER_SWEEP,
+      restAngle: -FLIPPER_SWEEP,
+      upAngle: FLIPPER_SWEEP,
     },
     {
       side: "right",
@@ -80,16 +81,17 @@ export const TABLE_CONFIG: TableConfig = {
       length: FLIPPER_LEN,
       baseHalfWidth: 0.55,
       tipHalfWidth: 0.28,
-      restAngle: -FLIPPER_SWEEP,
-      upAngle: FLIPPER_SWEEP,
+      restAngle: FLIPPER_SWEEP,
+      upAngle: -FLIPPER_SWEEP,
     },
   ],
   drain: { y: -18, maxX: LANE_INNER_X - 0.15 },
   plunger: { spawn: { x: 9.25, y: -19.3 } },
 };
 
-/** Contorno cônicco do flipper em coordenadas locais (pivô na origem,
- * ponta em +length no eixo x; espelhado para o flipper esquerdo). */
+/** Contorno cônico do flipper em coordenadas locais (pivô na origem, ponta em
+ * +length no eixo x). O flipper esquerdo usa a ponta para +x (varre para
+ * dentro); o direito é espelhado. */
 export function flipperOutline(spec: FlipperSpec): Vec2[] {
   const { length: L, baseHalfWidth: b, tipHalfWidth: t } = spec;
   const midX = L * 0.35;
@@ -102,5 +104,5 @@ export function flipperOutline(spec: FlipperSpec): Vec2[] {
     { x: midX, y: -midW },
     { x: 0, y: -b },
   ];
-  return spec.side === "left" ? pts.map((p) => ({ x: -p.x, y: p.y })) : pts;
+  return spec.side === "right" ? pts.map((p) => ({ x: -p.x, y: p.y })) : pts;
 }
