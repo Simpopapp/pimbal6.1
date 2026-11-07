@@ -16,12 +16,15 @@ Quando uma etapa do roadmap termina:
    Date: YYYY-MM-DD
 
    ## O que foi entregue
+
    - ...
 
    ## Arquivos / áreas tocadas
+
    - ...
 
    ## Notas para o monitor
+
    - ...
    ```
 

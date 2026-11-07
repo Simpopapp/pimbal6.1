@@ -41,6 +41,7 @@ Pasta: `.opencode/work/sub/{K}/` (ou ao lado dos pilares centrais, se o ambiente
 Mesmos papéis dos centrais, em escala de pacote. **Não copie** os centrais (o subagente já os recebe inteiros): referencie seções e detalhe o que o recorte exige. Qualidade acima de contagem de linhas: cada linha tem função; sem enchimento.
 
 ### 4.1 `project{N}-s{K}` — planejamento do subagente (≈ 15–60 linhas)
+
 - **Missão** em 2–3 frases e como ela serve ao objetivo central (o todo que ele precisa ter em mente).
 - **Escopo**: o que é dele; **fora do escopo**: o que é de outros pacotes (nomeie quais) e o que ele não pode tocar.
 - **Por quê**: riscos/falhas que este recorte evita; princípios do planejamento central que mais pesam aqui.
@@ -48,6 +49,7 @@ Mesmos papéis dos centrais, em escala de pacote. **Não copie** os centrais (o 
 - **Dono exclusivo de**: lista de arquivos/pastas.
 
 ### 4.2 `prd-project{N}-s{K}` — o COMO do subagente (≈ 60–250 linhas)
+
 - **Decisões técnicas já tomadas** que ele deve seguir (recortes dos centrais com referência de seção) e o "jeito exato de fazer" do harness/projeto: convenções, estrutura, nomes, estilo de testes, comandos de gate, armadilhas conhecidas.
 - **Contratos** que consome e produz (assinaturas, formatos, exemplos).
 - **Escopo por fase** do pacote, com critérios de aceite mensuráveis.
@@ -57,6 +59,7 @@ Mesmos papéis dos centrais, em escala de pacote. **Não copie** os centrais (o 
 - **Proibições** específicas (arquivos alheios, dependências novas, etc.).
 
 ### 4.3 `roadmap-proj{N}-s{K}` — fases do subagente (≈ 10–30 linhas)
+
 Fases em ordem de dependência, checkboxes, uma linha de Gates por fase, gates finais do pacote. Ele marca `[x]` aqui conforme avança, com números reais.
 
 ## 5. System prompt do subagente (molde)

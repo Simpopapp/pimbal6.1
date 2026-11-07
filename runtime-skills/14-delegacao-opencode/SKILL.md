@@ -9,6 +9,7 @@ description: >
 # Delegação ao OpenCode
 
 ## Objetivo
+
 Garantir que toda produção de código passa pelo OpenCode, com prova de
 funcionamento antes de qualquer entrega.
 
@@ -58,6 +59,7 @@ funcionamento antes de qualquer entrega.
 - Se cair a meio: refazer §0.1 antes de continuar a produzir.
 
 ## Referências
+
 - `.opencode/AGENTS.md` — documento canónico de operação do OpenCode.
 - `.opencode/Plan.md` — tarefas pendentes do runtime.
 - Skill `07-dev-server-preview` — proxy `/oc` e portas.

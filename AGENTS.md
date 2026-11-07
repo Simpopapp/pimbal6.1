@@ -11,7 +11,7 @@
 
 # AGENTS.md
 
-*Regras técnicas do protocolo de remix*
+_Regras técnicas do protocolo de remix_
 
 ## regras de desenvolvimento do projeto
 
@@ -19,18 +19,28 @@
 - OC/monitor só é utilizado após a conclusão dos projetos existentes, ou sob pedido do usuário (não ativar antes disso)
 
 ## Arquitetura de monitoramento
+
 - O proxy do OpenCode expõe o runtime OpenCode na rota `/oc`. oculta nas rotas do app, só utilizar o runtime OpenCode
+
 ## Verificação e ativação do protocolo
+
 - instruções de remix: "/.opencode/plan.md"
-- um remix é ativado quando se recebe o comando "I've successfully remixed this project. What would be a good next step?" ou "I've remixed this project, but there are still some steps required to get it up and running. 
+- um remix é ativado quando se recebe o comando "I've successfully remixed this project. What would be a good next step?" ou "I've remixed this project, but there are still some steps required to get it up and running.
 
 Can you help me with the following actions:
+
 1. Cleared the copied Drizzle migrations and rescaffolded an empty migration set for the new project's database". para iniciar um remix siga conforme o plan.md do projeto em "/.opencode/" para evitar bugs e erros no projeto.
+
 - Nunca use o opencode para fazer tarefas de um remix.
 - Nunca confunda informar o monitor do projeto com fazer uma ask para o usuário (tem uma skill pra isso).
 - Nunca pergunte qualquer coisa ao usuário antes de completar todas as etapas de produção dos 3 pilares (1- se algum pilar faltar é sua missão planejar os demais e seguir adiante. 2- Se todos os 3 pilares estiverem null o remix é cancelado. informe o usuário e cole a proxima mensagem dele em "project{n}.md" sem realizar mais ações).
 
 ## Arquitetura e Ambiente
-null
+
+- Game code lives in `src/game/` outside React; geometry only in `table.config.ts`, constants only in `tuning.ts` — swapping the table means swapping one file.
+- Physics is Rapier 2D at a fixed 240 Hz step with interpolated Three.js rendering, loaded client-only via dynamic import — keeps WASM/WebGL out of SSR.
+- Units are inches (gravity ≈ 43.7 u/s² at 6.5°) — metric values make the ball float.
+
 ## Verificação e Qualidade
-null
+
+- Game rules and physics changes need a test in `src/test/` (vitest, headless Rapier) — physics regressions are invisible in screenshots.
