@@ -63,10 +63,10 @@ describe("Pinball physics (Fase 1)", () => {
 
   it("flipper sobe até o limite em ~0,1 s ao ser acionado", async () => {
     const pw = await PhysicsWorld.create(TABLE_CONFIG);
-    const upAngle = TABLE_CONFIG.flippers[0].upAngle;
+    const upAngle = TABLE_CONFIG.flippers[0]!.upAngle;
     const input: StepInput = { ...NO_INPUT, left: true };
     runSteps(pw, 0.2, input);
-    const angle = pw.getFlipperAngles()[0];
+    const angle = pw.getFlipperAngles()[0]!;
     expect(Math.abs(angle - upAngle)).toBeLessThan(0.05);
   }, 30000);
 

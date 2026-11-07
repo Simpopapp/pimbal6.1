@@ -36,7 +36,10 @@ function arc(
 function polyline(pts: Vec2[], kind: WallSegment["kind"]): WallSegment[] {
   const segs: WallSegment[] = [];
   for (let i = 0; i < pts.length - 1; i++) {
-    segs.push({ from: pts[i], to: pts[i + 1], kind });
+    const a = pts[i];
+    const b = pts[i + 1];
+    if (!a || !b) continue;
+    segs.push({ from: a, to: b, kind });
   }
   return segs;
 }
