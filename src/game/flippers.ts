@@ -47,7 +47,8 @@ export class FlipperController {
     } else if (delta < 0) {
       w = Math.max(delta / dt, -TUNING.physics.flipper.fallSpeed);
     }
-    this.body.setAngvel({ x: 0, y: 0, z: w }, true);
+    // rapier2d: angvel é escalar
+    this.body.setAngvel(w, true);
   }
 
   get angle(): number {
