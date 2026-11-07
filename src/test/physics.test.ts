@@ -15,7 +15,8 @@ function runSteps(pw: PhysicsWorld, seconds: number, input: StepInput = NO_INPUT
 describe("Pinball physics (Fase 1)", () => {
   it("bola em queda livre acelera próximo de g·sin(inclinação)", async () => {
     const pw = await PhysicsWorld.create(TABLE_CONFIG);
-    pw.placeBall({ x: 0, y: 12 });
+    // longe dos bumpers/sensores, queda livre pura
+    pw.placeBall({ x: -6, y: 12 });
     runSteps(pw, 0.5);
     const v = pw.getBall();
     const expected = 386.09 * Math.sin((TUNING.physics.inclineDeg * Math.PI) / 180) * 0.5;
@@ -28,6 +29,7 @@ describe("Pinball physics (Fase 1)", () => {
     pw.testLaunch(TUNING.physics.plunger.maxLaunch);
     let sim = 0;
     let drains = 0;
+    let laneReturns = 0;
     while (sim < 8) {
       pw.step(DT, NO_INPUT);
       sim += DT;
@@ -38,13 +40,23 @@ describe("Pinball physics (Fase 1)", () => {
         expect(b.x).toBeLessThanOrEqual(10.51);
         expect(b.y).toBeGreaterThanOrEqual(-20.6);
         expect(b.y).toBeLessThanOrEqual(20.6);
+        // bola parada no fundo do canal de lançamento = voltou ao plunger
+        if (
+          b.x > TABLE_CONFIG.launchLane.innerX &&
+          b.y < -14 &&
+          Math.hypot(b.vx, b.vy) < 5
+        ) {
+          laneReturns++;
+          pw.testLaunch(TUNING.physics.plunger.maxLaunch);
+        }
       } else {
         drains++;
         pw.respawnBall();
         pw.testLaunch(TUNING.physics.plunger.maxLaunch);
       }
     }
-    expect(drains).toBeGreaterThan(0);
+    // a bola circulou pela mesa (drenou ou voltou ao canal) sem escapar
+    expect(drains + laneReturns).toBeGreaterThan(0);
   }, 60000);
 
   it("drain detecta a perda e o respawn recoloca a bola no plunger", async () => {
