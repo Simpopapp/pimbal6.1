@@ -79,9 +79,7 @@ describe("Elementos de mesa (Fase 2)", () => {
         pw.step(DT, NO_INPUT);
         const evs = eventsOf(pw);
         collected.push(...evs);
-        hit = evs.some(
-          (e) => e.type === "dropTargetHit" && e.targetId === target.id,
-        );
+        hit = evs.some((e) => e.type === "dropTargetHit" && e.targetId === target.id);
       }
       expect(hit).toBe(true);
     }
@@ -101,9 +99,7 @@ describe("Elementos de mesa (Fase 2)", () => {
     while (sim < 4 && !completed) {
       pw.step(DT, NO_INPUT);
       sim += DT;
-      completed = eventsOf(pw).some(
-        (e) => e.type === "rampCompleted" && e.id === ramp.id,
-      );
+      completed = eventsOf(pw).some((e) => e.type === "rampCompleted" && e.id === ramp.id);
     }
     expect(completed).toBe(true);
     // bola de volta em jogo, dentro da mesa

@@ -123,9 +123,7 @@ export class PhysicsWorld {
       const len = Math.hypot(dx, dy);
       const mid = { x: (w.from.x + w.to.x) / 2, y: (w.from.y + w.to.y) / 2 };
       const body = this.world.createRigidBody(
-        RAPIER.RigidBodyDesc.fixed()
-          .setTranslation(mid.x, mid.y)
-          .setRotation(Math.atan2(dy, dx)),
+        RAPIER.RigidBodyDesc.fixed().setTranslation(mid.x, mid.y).setRotation(Math.atan2(dy, dx)),
       );
       this.world.createCollider(
         RAPIER.ColliderDesc.cuboid(len / 2 + t / 2, t / 2)
@@ -381,10 +379,7 @@ export class PhysicsWorld {
       const dx = last.x - prev.x;
       const dy = last.y - prev.y;
       const l = Math.hypot(dx, dy) || 1;
-      const exitSpeed = Math.max(
-        rt.speed * rt.spec.exitSpeedFactor,
-        rt.spec.minExitSpeed,
-      );
+      const exitSpeed = Math.max(rt.speed * rt.spec.exitSpeedFactor, rt.spec.minExitSpeed);
       this.rampTransport = null;
       this.ballHeight = 0;
       this.spawnBall(last);
@@ -422,10 +417,7 @@ export class PhysicsWorld {
         1,
         this.plungerCharge + dt / TUNING.physics.plunger.chargeTimeS,
       );
-      b.setTranslation(
-        { x: this.config.plunger.spawn.x, y: this.config.plunger.spawn.y },
-        true,
-      );
+      b.setTranslation({ x: this.config.plunger.spawn.x, y: this.config.plunger.spawn.y }, true);
       b.setLinvel({ x: 0, y: 0 }, true);
     } else if (this.plungerCharging && !held) {
       this.plungerCharging = false;

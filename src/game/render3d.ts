@@ -120,9 +120,7 @@ export class SceneRenderer {
   private buildFlippers(): THREE.Object3D[] {
     return this.config.flippers.map((spec) => {
       const outline = flipperOutline(spec);
-      const shape = new THREE.Shape(
-        outline.map((p) => new THREE.Vector2(p.x, p.y)),
-      );
+      const shape = new THREE.Shape(outline.map((p) => new THREE.Vector2(p.x, p.y)));
       const geo = new THREE.ExtrudeGeometry(shape, {
         depth: 0.7,
         bevelEnabled: false,
@@ -232,10 +230,7 @@ export class SceneRenderer {
     });
     for (const bank of this.config.dropTargetBanks) {
       for (const target of bank.targets) {
-        const mesh = new THREE.Mesh(
-          new THREE.BoxGeometry(target.halfW * 2, 1.6, 0.3),
-          mat,
-        );
+        const mesh = new THREE.Mesh(new THREE.BoxGeometry(target.halfW * 2, 1.6, 0.3), mat);
         mesh.position.set(target.pos.x, 0.8, -target.pos.y);
         this.table.add(mesh);
         this.dropTargetMeshes.set(target.id, mesh);
@@ -252,14 +247,9 @@ export class SceneRenderer {
       opacity: 0.85,
     });
     for (const ramp of this.config.ramps) {
-      const pts = ramp.waypoints.map(
-        (p) => new THREE.Vector3(p.x, ramp.height, -p.y),
-      );
+      const pts = ramp.waypoints.map((p) => new THREE.Vector3(p.x, ramp.height, -p.y));
       const curve = new THREE.CatmullRomCurve3(pts);
-      const mesh = new THREE.Mesh(
-        new THREE.TubeGeometry(curve, 64, 0.7, 10, false),
-        mat,
-      );
+      const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, 64, 0.7, 10, false), mat);
       this.table.add(mesh);
     }
   }

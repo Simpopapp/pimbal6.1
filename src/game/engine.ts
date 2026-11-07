@@ -162,11 +162,7 @@ export class GameEngine {
         this.message = null;
       }
     }
-    if (
-      this.respawnAt !== null &&
-      !p.isBallInPlay() &&
-      this.simTime >= this.respawnAt
-    ) {
+    if (this.respawnAt !== null && !p.isBallInPlay() && this.simTime >= this.respawnAt) {
       p.respawnBall();
       this.respawnAt = null;
     }
