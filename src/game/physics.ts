@@ -186,6 +186,13 @@ export class PhysicsWorld {
     this.spawnBall(this.config.plunger.spawn);
   }
 
+  /** nudge: pequeno impulso na bola (controle do jogador) */
+  applyNudge(ix: number, iy: number): void {
+    if (!this.ball || this.rampTransport) return;
+    const v = this.ball.linvel();
+    this.ball.setLinvel({ x: v.x + ix, y: v.y + iy }, true);
+  }
+
   /** helper para testes: lança a bola do canal com velocidade dada */
   testLaunch(speed: number): void {
     if (!this.ball) return;

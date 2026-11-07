@@ -1,47 +1,50 @@
 import { PhysicsWorld, type StepInput } from "./physics";
+import { Rules } from "./rules";
 import { SceneRenderer } from "./render3d";
+import { GameState } from "./state";
 import { TABLE_CONFIG } from "./table.config";
 import { TUNING } from "./tuning";
 import type { GameEvent } from "./types";
 
 export interface HudState {
+  phase: "title" | "playing" | "ballLost" | "gameOver";
+  paused: boolean;
   score: number;
-  balls: number;
+  ballNumber: number;
+  ballsRemaining: number;
+  bonus: number;
+  multiplier: number;
   ballInPlay: boolean;
   /** 0..1 carga do plunger */
   plunger: number;
   message: string | null;
 }
 
-/** Pontos temporários por evento; a Fase 3 centraliza em rules.ts. */
+/** Pontos por evento (Fase 6 adiciona juice; valores vivem aqui por ora). */
 const EVENT_POINTS: Partial<Record<GameEvent["type"], number>> = {
   bumperHit: 100,
   slingshotHit: 50,
-  rolloverHit: 25,
   dropTargetHit: 50,
   bankCompleted: 500,
   rampCompleted: 1000,
 };
 
-const EVENT_MESSAGES: Partial<Record<GameEvent["type"], string>> = {
-  rampCompleted: "RAMP COMPLETE",
-  bankCompleted: "BANK DOWN",
-  ballLost: "BALL LOST",
-};
+const NUDGE_IMPULSE = 14;
 
-/** Dono exclusivo do requestAnimationFrame: acumulador com passo fixo de
- * 240 Hz e render interpolado. O React apenas recebe estados para o HUD. */
+/** Dono exclusivo do requestAnimationFrame e do fluxo de jogo:
+ * passo fixo de 240 Hz, render interpolado e máquina de estados. */
 export class GameEngine {
   private physics: PhysicsWorld | null = null;
   private renderer: SceneRenderer | null = null;
+  private rules = new Rules(TABLE_CONFIG.rollovers.length);
+  private state = new GameState();
+  private paused = false;
   private rafId = 0;
   private running = false;
   private acc = 0;
   private lastTime = 0;
   private simTime = 0;
   private respawnAt: number | null = null;
-  private ballsLost = 0;
-  private score = 0;
   private message: string | null = null;
   private input: StepInput = { left: false, right: false, plunger: false };
   private lastHud: HudState | null = null;
@@ -59,6 +62,7 @@ export class GameEngine {
     this.renderer = new SceneRenderer(this.canvas, TABLE_CONFIG);
     window.addEventListener("keydown", this.onKeyDown);
     window.addEventListener("keyup", this.onKeyUp);
+    this.state.set("title");
     this.pushHud();
   }
 
@@ -91,6 +95,16 @@ export class GameEngine {
     this.pushHud();
   }
 
+  private startGame(): void {
+    this.rules.reset();
+    this.physics?.respawnBall();
+    this.message = null;
+    this.respawnAt = null;
+    this.paused = false;
+    this.state.set("playing");
+    this.pushHud();
+  }
+
   private onKeyDown = (e: KeyboardEvent) => {
     if (
       e.code === "Space" ||
@@ -102,9 +116,24 @@ export class GameEngine {
       e.preventDefault();
     }
     if (e.repeat) return;
+    if (e.code === "Space") {
+      if (this.state.is("title") || this.state.is("gameOver")) {
+        this.startGame();
+        return;
+      }
+      this.input.plunger = true;
+    }
+    if (e.code === "KeyP" && this.state.is("playing")) {
+      this.paused = !this.paused;
+      this.pushHud();
+      return;
+    }
+    if (e.code === "ShiftLeft" || e.code === "ShiftRight") {
+      this.nudge();
+      return;
+    }
     if (e.code === "KeyZ" || e.code === "ArrowLeft") this.input.left = true;
     if (e.code === "Slash" || e.code === "ArrowRight") this.input.right = true;
-    if (e.code === "Space") this.input.plunger = true;
     this.pushHud();
   };
 
@@ -114,6 +143,17 @@ export class GameEngine {
     if (e.code === "Space") this.input.plunger = false;
     this.pushHud();
   };
+
+  private nudge(): void {
+    if (!this.physics || !this.state.is("playing") || this.paused) return;
+    const tilted = this.rules.nudge(this.simTime);
+    if (tilted) {
+      this.message = "TILT";
+    } else {
+      this.physics.applyNudge(0, NUDGE_IMPULSE);
+    }
+    this.pushHud();
+  }
 
   private loop = (now: number) => {
     if (!this.running) return;
@@ -128,15 +168,24 @@ export class GameEngine {
     this.acc += frameDt;
 
     const dt = TUNING.physics.fixedDt;
+    const active = this.state.is("playing") && !this.paused;
     let steps = 0;
-    while (this.acc >= dt && steps < TUNING.physics.maxStepsPerFrame) {
-      p.step(dt, this.input);
-      this.simTime += dt;
-      this.acc -= dt;
-      steps++;
-      this.postStep();
+    if (active) {
+      while (this.acc >= dt && steps < TUNING.physics.maxStepsPerFrame) {
+        const tilted = this.rules.isTilted(this.simTime);
+        p.step(
+          dt,
+          tilted ? { left: false, right: false, plunger: this.input.plunger } : this.input,
+        );
+        this.simTime += dt;
+        this.acc -= dt;
+        steps++;
+        this.postStep();
+      }
+      if (steps >= TUNING.physics.maxStepsPerFrame) this.acc = 0;
+    } else {
+      this.acc = 0;
     }
-    if (steps >= TUNING.physics.maxStepsPerFrame) this.acc = 0;
 
     const alpha = Math.min(1, Math.max(0, this.acc / dt));
     const ball = p.getBall();
@@ -152,19 +201,39 @@ export class GameEngine {
     const p = this.physics;
     if (!p) return;
     for (const ev of p.takeEvents()) {
-      this.score += EVENT_POINTS[ev.type] ?? 0;
-      const msg = EVENT_MESSAGES[ev.type];
-      if (msg) this.message = msg;
+      this.rules.addPoints(EVENT_POINTS[ev.type] ?? 0);
       if (ev.type === "ballLost") {
-        this.ballsLost++;
-        this.respawnAt = this.simTime + TUNING.physics.drain.respawnDelayS;
+        const result = this.rules.endOfBall();
+        if (result.gameOver) {
+          this.state.set("gameOver");
+          this.message = `GAME OVER — ${this.rules.score.toLocaleString("en-US")}`;
+        } else {
+          this.state.set("ballLost");
+          this.message = `BONUS +${result.awarded.toLocaleString("en-US")}`;
+          this.respawnAt = this.simTime + TUNING.physics.drain.respawnDelayS;
+        }
+      } else if (ev.type === "rolloverHit") {
+        if (this.rules.rollover(ev.id)) {
+          this.message = `MULTIPLIER x${this.rules.multiplier}`;
+        }
+      } else if (ev.type === "bankCompleted") {
+        this.message = "BANK DOWN";
+      } else if (ev.type === "rampCompleted") {
+        this.message = "RAMP COMPLETE";
       } else if (ev.type === "ballSpawned") {
         this.message = null;
       }
     }
-    if (this.respawnAt !== null && !p.isBallInPlay() && this.simTime >= this.respawnAt) {
+    if (
+      this.respawnAt !== null &&
+      this.state.is("ballLost") &&
+      !p.isBallInPlay() &&
+      this.simTime >= this.respawnAt
+    ) {
       p.respawnBall();
       this.respawnAt = null;
+      this.state.set("playing");
+      this.message = null;
     }
     this.pushHud();
   }
@@ -173,8 +242,13 @@ export class GameEngine {
     const p = this.physics;
     if (!p) return;
     const hud: HudState = {
-      score: this.score,
-      balls: Math.max(1, 3 - this.ballsLost),
+      phase: this.state.get(),
+      paused: this.paused,
+      score: this.rules.score,
+      ballNumber: this.rules.ballNumber,
+      ballsRemaining: this.rules.ballsRemaining,
+      bonus: this.rules.bonusValue,
+      multiplier: this.rules.multiplier,
       ballInPlay: p.isBallInPlay(),
       plunger: Math.round(p.getPlungerCharge() * 100) / 100,
       message: this.message,
@@ -183,10 +257,13 @@ export class GameEngine {
     if (
       last &&
       last.score === hud.score &&
-      last.balls === hud.balls &&
+      last.ballsRemaining === hud.ballsRemaining &&
       last.ballInPlay === hud.ballInPlay &&
       last.plunger === hud.plunger &&
-      last.message === hud.message
+      last.message === hud.message &&
+      last.bonus === hud.bonus &&
+      last.multiplier === hud.multiplier &&
+      last.paused === hud.paused
     ) {
       return;
     }
