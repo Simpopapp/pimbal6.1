@@ -55,10 +55,10 @@ export const TABLE_CONFIG: TableConfig = {
     seg({ x: -10, y: 10 }, { x: -10, y: -14.6 }, "outer"), // parede esquerda
     seg({ x: 10, y: 10 }, { x: 10, y: -20 }, "outer"), // parede direita (canal)
     seg({ x: 10, y: -20 }, { x: LANE_INNER_X, y: -20 }, "outer"), // piso do canal
-    seg({ x: LANE_INNER_X, y: -20 }, { x: LANE_INNER_X, y: 12 }, "inner"), // parede interna do canal
-    // curva do canal: (8.5,12) → (4.5,16), tangente horizontal no fim
-    ...arc(4.5, 12, 4, 0, 90, 10),
-    ...polyline([{ x: 4.5, y: 16 }, { x: 0.5, y: 16 }], "inner"), // guia de saída do canal
+    seg({ x: LANE_INNER_X, y: -20 }, { x: LANE_INNER_X, y: 8 }, "inner"), // parede interna do canal
+    // curva do canal: (8.5,8) → (4.5,12), tangente horizontal no fim
+    ...arc(4.5, 8, 4, 0, 90, 10),
+    ...polyline([{ x: 4.5, y: 12 }, { x: 0.5, y: 12 }], "inner"), // guia de saída do canal
     // guias inferiores até os flippers
     ...polyline([{ x: -10, y: -14.6 }, { x: -4.45, y: -14.9 }], "guide"),
     ...polyline([{ x: LANE_INNER_X, y: -14.6 }, { x: 4.45, y: -14.9 }], "guide"),
