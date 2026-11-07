@@ -45,12 +45,11 @@ export class FlipperController {
   step(dt: number): void {
     const target = this.pressed ? this.spec.upAngle : this.spec.restAngle;
     const delta = target - this.angle;
-    let w = 0;
-    if (delta > 0) {
-      w = Math.min(delta / dt, TUNING.physics.flipper.raiseSpeed);
-    } else if (delta < 0) {
-      w = Math.max(delta / dt, -TUNING.physics.flipper.fallSpeed);
-    }
+    const towardUp = delta * this.raiseSign > 0;
+    const maxV = towardUp
+      ? TUNING.physics.flipper.raiseSpeed
+      : TUNING.physics.flipper.fallSpeed;
+    const w = Math.max(-maxV, Math.min(maxV, delta / dt));
     // rapier2d: angvel é escalar
     this.body.setAngvel(w, true);
   }
