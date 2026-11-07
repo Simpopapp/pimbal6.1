@@ -27,7 +27,7 @@ describe("Regras de jogo (Fase 3)", () => {
     rules.addPoints(1000);
     rules.rollover(lanes[0]!); // 100
     rules.rollover(lanes[1]!); // 200
-    expect(rules.bonusValue).toBe(300);
+    expect(rules.bonusValue).toBe(200);
     rules.rollover(lanes[2]!); // +100 → 300, multiplicador sobe para 2
     expect(rules.bonusValue).toBe(600); // 300 × 2
     const result = rules.endOfBall();
