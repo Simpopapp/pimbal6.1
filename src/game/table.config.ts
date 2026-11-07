@@ -2,7 +2,17 @@
 // Trocar a mesa = trocar este arquivo. Coordenadas: origem no centro,
 // Y positivo para o topo. Mesa ~20 × 40 u (1 u = 1 polegada).
 
-import type { FlipperSpec, TableConfig, Vec2, WallSegment } from "./types";
+import type {
+  BumperSpec,
+  DropTargetBankSpec,
+  FlipperSpec,
+  RampSpec,
+  RolloverSpec,
+  SlingshotSpec,
+  TableConfig,
+  Vec2,
+  WallSegment,
+} from "./types";
 
 const DEG = Math.PI / 180;
 
@@ -80,6 +90,22 @@ export const TABLE_CONFIG: TableConfig = {
       [
         { x: LANE_INNER_X, y: -13.5 },
         { x: 4.45, y: -15.0 },
+      ],
+      "guide",
+    ),
+    // divisórias de outlane (selam o canal externo; a bola que cai do lado de
+    // fora drena)
+    ...polyline(
+      [
+        { x: -7.7, y: -14.1 },
+        { x: -7.3, y: -16.6 },
+      ],
+      "guide",
+    ),
+    ...polyline(
+      [
+        { x: 7.7, y: -13.8 },
+        { x: 7.35, y: -16.6 },
       ],
       "guide",
     ),
