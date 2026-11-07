@@ -38,6 +38,13 @@ export const TUNING = {
       maxLaunch: 155,
     },
     drain: { respawnDelayS: 1.0 },
+    elements: {
+      bumperCooldownS: 0.12,
+      slingshotCooldownS: 0.25,
+      rolloverCooldownS: 0.4,
+      dropTargetCooldownS: 0.2,
+      rampEntryCooldownS: 1.0,
+    },
   },
   visual: {
     tableTiltDeg: INCLINE_DEG,

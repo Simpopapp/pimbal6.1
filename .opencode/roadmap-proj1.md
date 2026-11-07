@@ -2,19 +2,20 @@
 
 Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de física + browser. Marcar `[x]` só com gates verdes.
 
-## Fase 1 — Núcleo de física (sem arte)
+## Fase 1 — Núcleo de física (sem arte) — CONCLUÍDA 2026-11-07
 
-- [ ] deps: three, @dimforge/rapier2d-compat, @types/three
-- [ ] src/game/{types,tuning,table.config}.ts (contratos fundação)
-- [ ] física: mundo Rapier, gravidade inclinada 43,7 u/s², bola c/ CCD, paredes restituição 0,4
-- [ ] flippers cinemáticos (subida ~0,08 s, descida lenta, geometria cônica)
-- [ ] plunger com carga proporcional + canal de lançamento + curva superior
-- [ ] drain + respawn no plunger
-- [ ] input: Z/←, /→, Espaço; touch metade esquerda/direita + plunger
-- [ ] render 3D inclinado com placeholders (caixas/esfera) + loop 240 Hz interpolado
-- [ ] rota `/` substitui placeholder; HUD mínimo (score, bolas)
-- [ ] teste: queda livre com g_eff correto; sem atravessamento; drain/respawn
-- Gates: build OK · tipos OK · lint OK · testes de física verdes · browser sem erro de console
+- [x] deps: three, @dimforge/rapier2d-compat, @types/three
+- [x] src/game/{types,tuning,table.config}.ts (contratos fundação)
+- [x] física: mundo Rapier, gravidade inclinada 43,7 u/s², bola c/ CCD, paredes restituição 0,4
+- [x] flippers cinemáticos (subida ~0,08 s, descida lenta, geometria cônica) — pontas varrem para DENTRO
+- [x] plunger com carga proporcional (90–155 u/s, escala real) + canal + curva superior
+- [x] drain + respawn no plunger
+- [x] input: Z/←, /→, Espaço; touch metade esquerda/direita + plunger
+- [x] render 3D inclinado com placeholders + loop 240 Hz interpolado
+- [x] rota `/` substitui placeholder; HUD mínimo (score, bolas)
+- [x] testes: queda livre g_eff ✓ · sem atravessamento ✓ · drain/respawn ✓ · flipper sobe ✓ · flipper chuta ✓
+- Gates: build OK · tipos OK (oj typecheck limpo) · lint 0 erros · 6/6 testes · browser sem erro de console (screenshots em /tmp/browser/pinball)
+- Correções registradas: plunger em escala real (90–155 u/s); canal sai em y=8 (bolso na curva prendia a bola); guias ~15° até os flippers; pontas dos flippers para dentro.
 
 ## Fase 2 — Elementos de mesa
 
