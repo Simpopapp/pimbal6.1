@@ -28,14 +28,14 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 - Gates: build OK · tipos OK · lint 0 erros · testes verdes · browser sem erro de console (screenshot da mesa populada)
 - Nota: bola que volta pelo topo cai no canal e espera novo plunger (comportamento válido; gate físico one-way fica para Fase 7).
 
-## Fase 3 — Regras e pontuação
+## Fase 3 — Regras e pontuação — CONCLUÍDA 2026-11-07
 
-- [ ] state.ts: máquina title→playing→ball_lost→game_over (+paused)
-- [ ] pontos + multiplicador de bônus (rollovers/lanes), aplica no fim da bola
-- [ ] 3 bolas, contagem, game over, reinício sem reload
-- [ ] tilt/nudge opcional com penalidade
-- [ ] teste: multiplicador aplica; game over após 3 drenagens; reinício limpa estado
-- Gates: build OK · tipos OK · lint OK · testes verdes · browser
+- [x] state.ts: máquina title→playing→ballLost→gameOver (+pause via tecla P)
+- [x] pontos + multiplicador de bônus (lanes completas, até 5×), aplicado no fim da bola
+- [x] 3 bolas, contagem, game over, reinício sem reload ("Play again")
+- [x] tilt/nudge (Shift) com penalidade: 3 nudges em 2,5 s travam flippers por 2 s
+- [x] testes: multiplicador · bônus × mult no fim da bola · game over após 3 bolas + reset · tilt · nudges espaçados — 16/16 no projeto
+- Gates: build OK · tipos OK · lint 0 erros · testes verdes · browser (título → start → lançamento → pausa, sem erro de console)
 
 ## Fase 4 — Missões e combos
 
@@ -79,4 +79,4 @@ Fases em ordem de dependência. Gates por fase: build + tipos + lint + testes de
 ## Encerramento
 
 - [ ] aceite global: partida 5+ min, screenshot vitrine, 60 fps, juice audível, zero atravessamento
-- Próximo remix: primeira fase não concluída acima.
+- Próximo remix: Fase 4 (missões e combos). Prontos: física (src/game/physics.ts), elementos (table.config.ts), regras (rules.ts/state.ts), HUD (components/game/PinballGame.tsx). Ganchos: eventos GameEvent já emitidos por todos os elementos.
