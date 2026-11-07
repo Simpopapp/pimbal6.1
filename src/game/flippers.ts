@@ -10,11 +10,15 @@ import type { FlipperSpec } from "./types";
 export class FlipperController {
   readonly body: RAPIER.RigidBody;
   private pressed = false;
+  /** sinal que leva do ângulo de repouso ao ângulo acionado (o flipper
+   * esquerdo sobe no sentido negativo, o direito no positivo) */
+  private readonly raiseSign: number;
 
   constructor(
     readonly spec: FlipperSpec,
     world: RAPIER.World,
   ) {
+    this.raiseSign = Math.sign(spec.upAngle - spec.restAngle);
     this.body = world.createRigidBody(
       RAPIER.RigidBodyDesc.kinematicVelocityBased()
         .setTranslation(spec.pivot.x, spec.pivot.y)
