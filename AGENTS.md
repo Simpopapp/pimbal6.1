@@ -1,5 +1,4 @@
 <!-- LOVABLE:BEGIN -->
-
 > [!IMPORTANT]
 > This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
 > published git history — force pushing, or rebasing/amending/squashing commits
@@ -8,7 +7,6 @@
 >
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
-
 <!-- LOVABLE:END -->
 
 # AGENTS.md
@@ -39,8 +37,10 @@ Can you help me with the following actions:
 
 ## Arquitetura e Ambiente
 
-null
+- Game code lives in `src/game/` outside React; geometry only in `table.config.ts`, constants only in `tuning.ts` — swapping the table means swapping one file.
+- Physics is Rapier 2D at a fixed 240 Hz step with interpolated Three.js rendering, loaded client-only via dynamic import — keeps WASM/WebGL out of SSR.
+- Units are inches (gravity ≈ 43.7 u/s² at 6.5°) — metric values make the ball float.
 
 ## Verificação e Qualidade
 
-null
+- Game rules and physics changes need a test in `src/test/` (vitest, headless Rapier) — physics regressions are invisible in screenshots.
