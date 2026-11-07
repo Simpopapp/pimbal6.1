@@ -115,7 +115,9 @@ export function PinballGame() {
 
       {hud.paused ? (
         <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center bg-background/60 backdrop-blur-sm">
-          <p className="font-mono text-4xl font-black tracking-[0.4em] text-foreground uppercase">Paused</p>
+          <p className="font-mono text-4xl font-black tracking-[0.4em] text-foreground uppercase">
+            Paused
+          </p>
         </div>
       ) : null}
 
@@ -124,14 +126,18 @@ export function PinballGame() {
           <div className="flex max-w-sm flex-col items-center gap-5 px-6 text-center">
             {hud.phase === "title" ? (
               <>
-                <p className="text-[11px] tracking-[0.5em] text-muted-foreground uppercase">3D Pinball</p>
+                <p className="text-[11px] tracking-[0.5em] text-muted-foreground uppercase">
+                  3D Pinball
+                </p>
                 <h1 className="font-mono text-5xl font-black tracking-tight text-foreground uppercase">
                   Nova <span className="text-primary">Strike</span>
                 </h1>
               </>
             ) : (
               <>
-                <p className="text-[11px] tracking-[0.5em] text-muted-foreground uppercase">Game over</p>
+                <p className="text-[11px] tracking-[0.5em] text-muted-foreground uppercase">
+                  Game over
+                </p>
                 <p className="font-mono text-5xl font-black text-foreground tabular-nums">
                   {hud.score.toLocaleString("en-US")}
                 </p>
